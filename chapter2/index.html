@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+	<meta charset="UTF-8">
+	<title>材质、动画、FPS</title>
+</head>
+<body>
+<button id="stopBtn" onclick="stop()">Stop</button>
+<script src="../three.js"></script>
+<script src="../stats.js"></script>
+<script>
+	//------------添加FPS
+	var stat,cube,renderer,scene,camera,id
+	function init() {
+	  stat = new Stats()
+	  stat.domElement.style.position = 'absolute'
+      stat.domElement.style.left = 'auto';
+      stat.domElement.style.top = '0px';
+      stat.domElement.style.right = '20px';
+      document.body.appendChild(stat.domElement)
+
+	  renderer = new THREE.WebGLRenderer()
+
+	renderer.setSize(window.innerWidth,window.innerHeight)
+	document.body.appendChild(renderer.domElement)
+
+	  scene = new THREE.Scene()
+
+	let axis = new THREE.AxisHelper(100)
+	scene.add(axis)
+
+	camera = new THREE.OrthographicCamera(-50,50,50,-50,1,100)
+	camera.position.set(30,30,30)
+	camera.lookAt(new THREE.Vector3(0,0,0))
+	scene.add(camera)
+
+	var light = new THREE.PointLight(0xffffff,1,10000);
+	light.position.set(30,30,30);
+	scene.add(light);
+
+//	let material = new THREE.MeshBasicMaterial({
+//		color: 0xff0000,
+//		//wireframe: true,
+//		visible: true,
+//		side: THREE.BackSide //THREE.FrontSide
+//
+//	})
+
+//	let material = new THREE.MeshLambertMaterial({
+//		color: 0xff0000
+//	})
+
+//	let material = new THREE.MeshLambertMaterial({
+//	  color: 0xff0000,
+//	  emissive: 0xff0000
+//	})
+
+	let material = new THREE.MeshPhongMaterial({
+	  //color: 0xff0000,
+	  specular: 0xff0000,
+	  shininess:10
+	})
+
+	//let material = new THREE.MeshNormalMaterial() //法向材质，法向材质可以将材质的颜色设置为其法向量的方向
+	  cube = new THREE.Mesh(new THREE.CubeGeometry(20,20,20),material)
+
+	scene.add(cube)
+    }
+    init()
+
+    function draw() {
+      stat.begin()
+      cube.rotation.y +=0.01
+      renderer.render(scene,camera)
+      //id = requestAnimationFrame(draw)
+      stat.end()
+    }
+    setInterval(function () {
+      draw()
+    },50)
+
+
+    function stop() {
+      if (id !== null) {
+        cancelAnimationFrame(id);
+        id = null;
+      }
+    }
+
+</script>
+</body>
+</html>
