@@ -40,9 +40,11 @@ function init() {
   effect = new THREE.OutlineEffect(renderer) //生成目标轮廓效果
 
   var onProgress = function (xhr) {
+    var process = document.getElementsByClassName('process')[0]
     if(xhr.lengthComputable){
       var percentComplete = xhr.loaded/xhr.total*100
       console.log(Math.round(percentComplete)+'% downloaded')
+      process.textContent = Math.round(percentComplete)+'% downloaded'
     }
   }
 
